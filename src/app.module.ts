@@ -33,7 +33,7 @@ import { AuthModule } from './features/auth/auth.module';
       isGlobal: true,
       useFactory: async () => ({
         store: await redisStore({ url: process.env.REDIS_URL }),
-        ttl: 60, // default TTL seconds
+        ttl: 60,
       }),
     }),
     PrismaModule,
