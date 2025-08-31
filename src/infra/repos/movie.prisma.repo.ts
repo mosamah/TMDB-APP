@@ -141,7 +141,7 @@ export class MoviePrismaRepository implements MovieRepository {
   async getRatings(movieId: string) {
     return this.prisma.rating.findMany({
       where: { movieId },
-      include: { user: true }, // optional: include user info
+      include: { user: true },
     });
   }
 
