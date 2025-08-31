@@ -31,7 +31,7 @@ A **NestJS-based RESTful API** that integrates with [TMDB](https://www.themovied
 
 ### 1. Clone Repo
 ```bash
-git clone https://github.com/your-username/tmdb-backend.git
+git clone https://github.com/mosamah/TMDB-APP.git
 cd tmdb-backend
 ```
 
