@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  ratings      Rating[]
+  watchlist    Watchlist[]
+  favorites    Favorite[]
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  tmdbId Int     @unique
+  name   String
+  movies Movie[] @relation("MovieGenres")
+}
+
+model Movie {
+  id              String     @id @default(uuid())
+  tmdbId          Int        @unique
+  title           String
+  overview        String?
+  releaseDate     DateTime?
+  posterPath      String?
+  popularity      Float?
+  tmdbVoteAverage Float?
+  avgRating       Float      @default(0)
+  ratingCount     Int        @default(0)
+  
+  genres          Genre[]    @relation("MovieGenres")  // Many-to-many
+  ratings         Rating[]   // One-to-many
+  watchlist       Watchlist[] // One-to-many
+  favorites       Favorite[]  // One-to-many
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  userId    String
+  movieId   String
+  score     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}
+
+model Watchlist {
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([userId, movieId])
+}
+
+model Favorite {
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@id([userId, movieId])
+}
